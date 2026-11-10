@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sarim Mohib — developer</title>
+<meta name="description" content="Sarim Mohib, computer science undergraduate. I build developer tooling in Node, Python and shell, mostly on hardware that was never meant to run it.">
+<meta name="theme-color" content="#0f1113">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+  :root {
+    --bg: #0f1113;
+    --surface: #16191c;
+    --line: #262b2f;
+    --ink: #e7e5e1;
+    --muted: #9aa0a4;
+    --accent: #a3c9a8;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 46rem;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 5rem;
+  }
+
+  a { color: var(--ink); text-decoration-color: var(--line); text-underline-offset: 3px; }
+  a:hover { text-decoration-color: var(--accent); color: var(--accent); }
+
+  /* header */
+  .top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .mark {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    letter-spacing: 0.02em;
+    color: var(--muted);
+  }
+  .mark strong { color: var(--ink); font-weight: 600; }
+
+  nav {
+    display: flex;
+    gap: 1.25rem;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+  }
+  nav a { color: var(--muted); text-decoration: none; }
+  nav a:hover { color: var(--accent); }
+
+  /* hero */
+  h1 {
+    margin: 3.5rem 0 1rem;
+    font-size: clamp(2.1rem, 6vw, 3rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-weight: 600;
+  }
+
+  .lead {
+    margin: 0;
+    max-width: 34rem;
+    font-size: 1.12rem;
+    color: #cfcdc9;
+  }
+
+  /* sections */
+  section { margin-top: 3.5rem; }
+
+  h2 {
+    margin: 0 0 1.25rem;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  p { margin: 0 0 1rem; }
+  p:last-child { margin-bottom: 0; }
+
+  .about p { color: #cfcdc9; max-width: 38rem; }
+
+  /* work */
+  .item {
+    display: block;
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 0.75rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    text-decoration: none;
+    transition: border-color 120ms ease, transform 120ms ease;
+  }
+  .item:hover { border-color: #3a4147; transform: translateY(-1px); }
+
+  .item h3 {
+    margin: 0 0 0.3rem;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .item:hover h3 { color: var(--accent); }
+
+  .item p {
+    margin: 0;
+    font-size: 0.94rem;
+    color: var(--muted);
+  }
+
+  .stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.7rem;
+  }
+
+  .stack span {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: #8f969b;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.1rem 0.4rem;
+  }
+
+  /* footer */
+  footer {
+    margin-top: 4.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+
+  @media (max-width: 480px) {
+    body { font-size: 16px; }
+    .wrap { padding: 1.75rem 1.15rem 3.5rem; }
+    h1 { margin-top: 2.5rem; }
+    section { margin-top: 2.75rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .item { transition: none; }
+    .item:hover { transform: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <span class="mark"><strong>sarim mohib</strong> / developer</span>
+    <nav>
+      <a href="#work">work</a>
+      <a href="https://github.com/sarimmohib">github</a>
+    </nav>
+  </header>
+
+  <h1>Sarim Mohib</h1>
+
+  <p class="lead">
+    Computer science undergraduate. I build developer tooling &mdash; bridges, agents,
+    small CLIs &mdash; and I like getting it to run on hardware that was never meant to run it.
+  </p>
+
+  <section class="about">
+    <h2>About</h2>
+    <p>
+      I study computer science in Peshawar, Pakistan. Most of what I write is JavaScript,
+      TypeScript, Python and shell: API bridges, tool-calling layers, and the glue that
+      makes coding agents usable outside a browser tab.
+    </p>
+    <p>
+      My usual machine is a Redmi Note 11 running a full Kali Linux chroot, so I spend a
+      lot of time on the unglamorous side of software &mdash; memory ceilings, missing
+      systemd, binaries that refuse to exec &mdash; and it has made me fairly ruthless
+      about dependencies.
+    </p>
+  </section>
+
+  <section id="work">
+    <h2>Selected work</h2>
+
+    <a class="item" href="https://github.com/sarimmohib/deepseek-bridge">
+      <h3>deepseek-bridge</h3>
+      <p>
+        A local, OpenAI-compatible API for chat.deepseek.com. Streaming, vision and
+        emulated native tool calling, behind one endpoint any client can talk to.
+      </p>
+      <div class="stack"><span>node</span><span>api</span><span>tool calling</span></div>
+    </a>
+
+    <a class="item" href="https://github.com/sarimmohib/opencode-swarm-integration">
+      <h3>opencode-swarm-integration</h3>
+      <p>
+        A multi-agent kit for opencode: an orchestrator plus planner, coder, reviewer and
+        tester subagents, with skills and a <code>/team</code> command.
+      </p>
+      <div class="stack"><span>agents</span><span>shell</span><span>opencode</span></div>
+    </a>
+
+    <a class="item" href="https://github.com/sarimmohib/Yt-Downloader-termux">
+      <h3>Yt-Downloader-termux</h3>
+      <p>
+        A terminal YouTube downloader for Termux that sorts media by uploader and
+        playlist, resumes interrupted transfers and muxes with FFmpeg.
+      </p>
+      <div class="stack"><span>python</span><span>tui</span><span>ffmpeg</span></div>
+    </a>
+  </section>
+
+  <section>
+    <h2>Elsewhere</h2>
+    <p>
+      Code and experiments live on
+      <a href="https://github.com/sarimmohib">GitHub</a>. I'm always happy to talk
+      about agent tooling, local-first APIs, or running Linux on a phone.
+    </p>
+  </section>
+
+  <footer>
+    <span>Peshawar, Pakistan</span>
+    <span><a href="https://github.com/sarimmohib">github.com/sarimmohib</a></span>
+  </footer>
+
+</div>
+</body>
+</html>

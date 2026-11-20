@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sarim Mohib — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-width:0;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+img{max-width:100%}
+::selection{background:var(--acc);color:#101010}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.wrap{width:100%;max-width:var(--page,1240px);margin:0 auto;padding:0 var(--pad,clamp(20px,5vw,64px))}
+.rv{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
+.rv.in{opacity:1;transform:none}
+
+:root{--bg:#101010;--ink:#f5f2e8;--orange:#ff5c1a;--page:1280px}
+body{background:var(--bg);color:var(--ink);font-family:'Anton',sans-serif;font-size:15px;letter-spacing:.01em}
+.hd{padding:18px 0;border-bottom:2px solid var(--ink)}
+.hd .wrap{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.brand{font-size:18px;letter-spacing:.02em}.brand span{color:var(--orange)}
+.nav{display:flex;gap:clamp(10px,3vw,24px);font-family:'DM Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.1em;flex-wrap:wrap}
+.nav a:hover{color:var(--orange)}
+.hero{padding:clamp(40px,7vw,80px) 0 0;overflow:hidden}
+.marquee{white-space:nowrap;overflow:hidden;border-bottom:2px solid var(--ink)}
+.marquee div{display:inline-block;white-space:nowrap;animation:mv 24s linear infinite}
+.marquee span{font-size:clamp(90px,20vw,260px);line-height:1.0;letter-spacing:-.01em;text-transform:uppercase;-webkit-text-stroke:2px var(--ink);color:transparent}
+.marquee span b{color:var(--orange);-webkit-text-stroke:0}
+@keyframes mv{to{transform:translateX(-50%)}}
+.hero .below{position:relative;padding:clamp(30px,5vw,56px) 0 clamp(86px,10vw,130px)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(220px,.7fr);gap:clamp(24px,5vw,52px);align-items:end}
+.kick{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--orange)}
+h1{font-size:clamp(38px,6vw,76px);line-height:1.02;text-transform:uppercase;letter-spacing:.01em;margin:18px 0 0}
+.lead{font-family:'DM Mono',monospace;font-size:13px;line-height:1.7;max-width:44ch;margin-top:22px}.lead b{color:var(--orange)}
+.big-id{font-size:clamp(50px,9vw,110px);line-height:.95;letter-spacing:-.015em;text-transform:uppercase;color:var(--orange);margin-bottom:clamp(30px,5vw,54px)}
+.big-id small{display:block;font-family:'DM Mono',monospace;font-size:10px;color:var(--ink);letter-spacing:.1em;margin-top:14px}
+.sec{padding:clamp(54px,8vw,88px) 0;border-top:2px solid var(--ink)}
+.sec-h{font-size:clamp(30px,5vw,58px);text-transform:uppercase;letter-spacing:.005em;margin:0 0 30px;line-height:1.0}
+.sec-h em{color:var(--orange);font-style:normal}
+.about-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:24px}
+.about-g p{font-family:'DM Mono',monospace;font-size:13px;line-height:1.8;margin:0}
+.tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:26px}
+.skill{font-family:'DM Mono',monospace;font-size:10px;border:1px solid var(--ink);padding:6px 10px;border-radius:100px}
+.proj{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(14px,3vw,30px);border-top:2px solid var(--ink);padding:26px 0}
+.proj:last-of-type{border-bottom:2px solid var(--ink)}
+.pno{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;color:var(--orange)}
+.pname{font-size:clamp(32px,6vw,64px);text-transform:uppercase;line-height:1.0;letter-spacing:.005em;margin:10px 0 14px}
+.proj:hover .pname{color:var(--orange)}
+.proj__main{display:block}
+.proj__meta{display:flex;flex-direction:column;justify-content:flex-end;gap:16px}
+.proj__source{font-family:var(--mono);font-size:11px;color:var(--ink);border-bottom:1px solid var(--line-2);padding-bottom:3px;align-self:flex-start}
+.proj__source:hover{color:var(--orange);border-color:var(--orange)}
+.pdesc{font-family:'DM Mono',monospace;font-size:12px;line-height:1.65;margin:0}
+.pstack{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--orange);margin-top:14px}
+.more{display:inline-block;margin-top:22px;font-family:'DM Mono',monospace;font-size:11px;border-bottom:2px solid var(--orange);padding-bottom:4px}
+.contact{background:var(--orange);color:#101010}
+.contact h2{font-size:clamp(46px,10vw,120px);text-transform:uppercase;line-height:.95;letter-spacing:-.01em;margin:0}
+.contact p{font-family:'DM Mono',monospace;font-size:13px;line-height:1.7;max-width:44ch;margin:22px 0 0}
+.contact .contact-in{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr);gap:30px;align-items:end}
+.handle{font-family:'DM Mono',monospace;font-size:12px;border:2px solid #101010;padding:10px 14px;border-radius:100px;display:inline-block}
+.handle button{background:none;border:none;color:inherit;font-size:10px;margin-left:10px;cursor:pointer}
+.contact__links{display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+.btn{display:inline-block;background:#101010;color:var(--orange);font-family:'DM Mono',monospace;font-size:11px;padding:14px 20px;border-radius:100px;margin-top:4px}
+footer{padding:24px 0;font-family:'DM Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.08em}footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+@media(max-width:900px){.hero .wrap,.contact .contact-in{grid-template-columns:1fr}.proj{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.marquee div{animation:none}}
+
+.rv{opacity:1!important;transform:none!important}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.rv{opacity:1!important;transform:none!important}}
+
+/* ===== DINO RUNNER — sits on the hero separation line ===== */
+#runner{position:absolute;left:0;bottom:-1px;width:100%;height:130px;z-index:8;cursor:pointer;touch-action:manipulation}
+#runner canvas{display:block;width:100%;height:130px;image-rendering:pixelated}
+#runner .go{position:absolute;right:10px;bottom:8px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--ink);opacity:.7;pointer-events:none}
+#runner .go.show{opacity:1;color:var(--orange)}
+@media(prefers-reduced-motion:reduce){#runner canvas{image-rendering:auto}}
+
+</style></head><body>
+
+<header class="hd"><div class="wrap"><div class="brand">SARIM<span>.</span>MOHIB</div><nav class="nav"><a href="https://sarimmohib.github.io/">Home</a><a href="#about">About</a><a href="#work">Work</a><a href="#contact">Contact ↗</a></nav></div></header>
+<main id="top"><section class="hero"><div class="marquee" aria-hidden="true"><div><span>BUILD <b>MAKE</b> SHIP &nbsp; BUILD <b>MAKE</b> SHIP &nbsp; </span><span>BUILD <b>MAKE</b> SHIP &nbsp; BUILD <b>MAKE</b> SHIP &nbsp; </span></div></div>
+<div class="below"><div class="wrap"><div><div class="kick rv">CS STUDENT · FAST PESHAWAR · 2026</div>
+<h1 class="rv">Software with<br>a pulse.</h1><p class="lead rv">I'm <b>Sarim Mohib</b>. I build Android apps and developer tools — small, honest pieces of software made with care for how they actually feel in your hands.</p></div>
+<div class="big-id rv">SM—01<small>STATUS: BUILDING<br>OPEN TO COLLABORATE</small></div><div id="runner" aria-label="Tiny runner game — press space or tap to jump">
+  <canvas id="rc" width="1280" height="112"></canvas>
+  <div class="go" id="rgo">SPACE / TAP — HI 00000</div>
+</div>
+</div></div></section>
+<section class="sec" id="about"><div class="wrap"><h2 class="sec-h rv">Who <em>I am.</em></h2>
+<div class="about-g"><p class="rv">I'm a first-semester CS student at FAST NUCES, and most of my time goes into understanding how things actually work — then building small, useful tools with what I learn. The goal is never more features; it's fewer, better ones.</p><p class="rv">Right now that means Android — calm, considered apps made with Kotlin — and agent tooling, where a handful of small pieces can do the work of one big one. I like clean interfaces, honest software, and details you notice only after a week of use.</p></div><div class="tags rv"><span class="skill">Kotlin</span> / <span class="skill">Java</span> / <span class="skill">Shell</span> / <span class="skill">Android</span> / <span class="skill">Material 3</span> / <span class="skill">opencode</span> / <span class="skill">Mobile UI</span> / <span class="skill">Systems</span></div></div></section>
+<section class="sec" id="work"><div class="wrap"><h2 class="sec-h rv">The <em>work.</em></h2>
+<div class="proj rv">
+  <a class="proj__main" href="https://sarimmohib.github.io/trinity/" target="_blank" rel="noopener">
+    <div class="pno">001 / 2026 — IN DEVELOPMENT</div><h3 class="pname">Trinity</h3>
+    <p class="pdesc">Calls, messages and contacts in one open-source Android app. No ads, no trackers, no account — just your phone's own data in one calm interface.</p>
+  </a>
+  <div class="proj__meta">
+    <div class="pstack">KOTLIN · JAVA · MATERIAL EXPRESSIVE</div>
+    <a class="proj__source" href="https://github.com/sarimmohib/trinity" target="_blank" rel="noopener">View source ↗</a>
+  </div>
+</div>
+<div class="proj rv">
+  <a class="proj__main" href="https://sarimmohib.github.io/swarm/" target="_blank" rel="noopener">
+    <div class="pno">002 / 2026 — OPEN SOURCE</div><h3 class="pname">opencode Swarm</h3>
+    <p class="pdesc">A multi-agent kit for opencode: one orchestrator, four specialists, and a /team command that plans, builds, reviews and tests in parallel.</p>
+  </a>
+  <div class="proj__meta">
+    <div class="pstack">SHELL · AGENT TOOLING · VIM</div>
+    <a class="proj__source" href="https://github.com/sarimmohib/opencode-swarm-integration" target="_blank" rel="noopener">View source ↗</a>
+  </div>
+</div>
+<div class="proj rv">
+  <a class="proj__main" href="https://sarimmohib.github.io/dsh-designer-mode/" target="_blank" rel="noopener">
+    <div class="pno">003 / 2026 — OPEN SOURCE</div><h3 class="pname">DSH Designer Mode</h3>
+    <p class="pdesc">A live UI canvas plugin for DeepSeek Harness. Point at an element, send the change, watch the revision land — a game-like design loop inside the conversation. Try the interactive demo on the project page.</p>
+  </a>
+  <div class="proj__meta">
+    <div class="pstack">JAVASCRIPT · DSH PLUGIN · INTERACTIVE UI</div>
+    <a class="proj__source" href="https://github.com/sarimmohib/dsh-designer-mode" target="_blank" rel="noopener">View source ↗</a>
+  </div>
+</div>
+<a class="more rv" href="https://github.com/sarimmohib?tab=repositories" target="_blank" rel="noopener">ALL PUBLIC REPOSITORIES ↗</a></div></section>
+<section class="contact" id="contact"><div class="wrap contact-in"><div><h2 class="rv">LET'S GO.</h2><p class="rv">Up for talking about Android, developer tooling, or a problem worth solving. GitHub is the best place to start a conversation.</p></div>
+<div class="rv contact__links"><div class="handle">@sarimmohib <button id="copy" type="button">COPY</button></div><a class="handle" href="mailto:sarimmohibkhan@gmail.com">sarimmohibkhan@gmail.com</a><a class="btn" href="https://github.com/sarimmohib" target="_blank" rel="noopener">OPEN GITHUB ↗</a></div></div></section></main>
+<footer><div class="wrap"><span>SARIM MOHIB · FAST PESHAWAR · 2026</span><span><a href="#top">TOP ↑</a></span></div></footer>
+<script>
+(function(){
+  var els=document.querySelectorAll('.rv');
+  var reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function showAll(){els.forEach(function(x){x.classList.add('in')})}
+  if(reduced||!('IntersectionObserver'in window)){showAll()}
+  else{
+    var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}})},{rootMargin:'0px 0px -6% 0px',threshold:.08});
+    els.forEach(function(x){io.observe(x)});
+    setTimeout(showAll,1500);
+  }
+  var c=document.getElementById('copy');
+  if(c)c.addEventListener('click',function(){
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText('sarimmohib').then(function(){c.textContent='COPIED';setTimeout(function(){c.textContent='COPY'},1500)}).catch(function(){c.textContent='SELECT'})
+    }else{c.textContent='SELECT'}
+  });
+})();
+</script>
+<script>
+(function(){
+  'use strict';
+  var cv=document.getElementById('rc'); if(!cv) return;
+  var ctx=cv.getContext('2d');
+  var W=0,H=0,GROUND=0;
+  var PX=54;                             // dino x (logical px)
+  var dino={y:0,vy:0,on:true};
+  var obs=[], clouds=[], speed=7, score=0, best=0, over=false, started=false, tick=0, lastSpawn=0;
+  var go=document.getElementById('rgo');
+  var JUMP=-8, GRAV=0.4;
+
+  // size canvas to its REAL display size so the sprite is never squished
+  function resize(){
+    var r=cv.getBoundingClientRect();
+    var dpr=window.devicePixelRatio||1;
+    W=Math.max(300,r.width); H=Math.max(48,r.height);
+    cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);   // draw in logical CSS pixels
+    GROUND=H-9;
+    if(!started||dino.y===0) dino.y=GROUND;
+    if(dino.y>GROUND) dino.y=GROUND;
+  }
+  resize();
+  window.addEventListener('resize',resize,false);
+
+  function reset(){ dino.y=GROUND;dino.vy=0;dino.on=true;obs=[];clouds=[];lastSpawn=performance.now();speed=7;score=0;over=false;started=true;go.classList.remove('show'); }
+  function jump(){
+    if(over){ reset(); return; }
+    started=true;
+    if(dino.on){ dino.vy=JUMP; dino.on=false; }
+  }
+  window.addEventListener('keydown',function(e){
+    if(e.code==='Space'||e.key===' '||e.key==='ArrowUp'||e.keyCode===32){ e.preventDefault(); jump(); }
+  },false);
+  cv.addEventListener('pointerdown',function(e){ e.preventDefault(); jump(); },false);
+  cv.addEventListener('click',function(e){ jump(); },false);
+  var runner=document.getElementById('runner');
+  if(runner) runner.addEventListener('pointerdown',function(){ jump(); },false);
+
+  function rect(x,y,w,hh,c){ ctx.fillStyle=c; ctx.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(hh)); }
+  // dino drawn in logical pixels: ~30 wide x ~32 tall, sitting on GROUND
+  function drawDino(){
+    var x=PX, y=dino.y-32, c='#f5f2e8';
+    rect(x+10,y+9,16,18,c);            // body
+    rect(x+14,y+2,15,9,c);             // head
+    rect(x+26,y+6,7,4,c);              // snout
+    rect(x+28,y+7,2,2,'#101010');      // eye
+    rect(x+6,y+17,9,4,c); rect(x+3,y+15,6,3,c);  // tail
+    rect(x+24,y+16,6,3,c);             // arm
+    if(dino.on&&!over){
+      if((tick>>2)%2){ rect(x+11,y+27,5,6,c); rect(x+20,y+27,5,3,c); }
+      else { rect(x+11,y+27,5,3,c); rect(x+20,y+27,5,6,c); }
+    } else { rect(x+11,y+27,5,5,c); rect(x+20,y+27,5,5,c); }
+  }
+  function cactus(o){
+    var x=o.x|0, y=GROUND-o.h, c=o.c;
+    rect(x+7,y,8,o.h,c);
+    if(o.arms){
+      rect(x,y+8,7,4,c); rect(x,y+8,3,12,c);
+      rect(x+15,y+13,8,4,c); rect(x+20,y+7,3,7,c);
+    }
+  }
+  function loop(){
+    tick++;
+    if(!over&&started){
+      score+=speed*0.02;
+      if(!dino.on){ dino.vy+=GRAV; dino.y+=dino.vy; if(dino.y>=GROUND){dino.y=GROUND;dino.vy=0;dino.on=true} }
+      // time-based spawner: reliable at any frame rate
+      var now=performance.now();
+      if(now-lastSpawn>1400 && (!obs.length || obs[obs.length-1].x<W-230)){
+        lastSpawn=now;
+        obs.push({x:W+30,h:24+Math.random()*22,arms:Math.random()>.5,c:Math.random()>.5?'#7ac74f':'#55a630'});
+      }
+      for(var i=obs.length-1;i>=0;i--){
+        obs[i].x-=speed;
+        var ax=PX+11,ay=dino.y-30,aw=20,ah=29, bx=obs[i].x+7,by=GROUND-obs[i].h+2,bw=10,bh=obs[i].h-4;
+        if(ax<bx+bw&&ax+aw>bx&&ay<by+bh&&ay+ah>by){
+          over=true; best=Math.max(best,Math.floor(score));
+          go.textContent='GAME OVER · SCORE '+Math.floor(score)+' · SPACE/TAP TO RESTART'; go.classList.add('show');
+        }
+        if(obs[i].x<-40) obs.splice(i,1);
+      }
+      if(!clouds.length&&Math.random()<0.01) clouds.push({x:W,y:8+Math.random()*14,w:22+Math.random()*26});
+      clouds.forEach(function(c){c.x-=speed*0.3}); clouds=clouds.filter(function(c){return c.x>-60});
+      speed=Math.min(13,speed+0.0008);
+    }
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='rgba(245,242,232,.12)'; clouds.forEach(function(c){ctx.fillRect(c.x,c.y,c.w,2)});
+    rect(0,GROUND,W,2,'rgba(245,242,232,.9)');
+    var off=(tick*speed)%28; for(var gx=-off;gx<W;gx+=28) rect(gx,GROUND+5,11,1,'rgba(245,242,232,.35)');
+    obs.forEach(cactus);
+    drawDino();
+    if(!started&&!over) go.textContent='SPACE / TAP TO START — HI '+String(best).padStart(5,'0');
+    else if(!over) go.textContent='HI '+String(best).padStart(5,'0')+'  '+String(Math.floor(score)).padStart(5,'0');
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+})();
+</script>
+
+</body></html>

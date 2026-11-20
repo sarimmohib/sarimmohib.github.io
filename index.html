@@ -57,7 +57,8 @@ h1{font-size:clamp(38px,6vw,76px);line-height:1.02;text-transform:uppercase;lett
 .contact .contact-in{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr);gap:30px;align-items:end}
 .handle{font-family:'DM Mono',monospace;font-size:12px;border:2px solid #101010;padding:10px 14px;border-radius:100px;display:inline-block}
 .handle button{background:none;border:none;color:inherit;font-size:10px;margin-left:10px;cursor:pointer}
-.btn{display:inline-block;background:#101010;color:var(--orange);font-family:'DM Mono',monospace;font-size:11px;padding:14px 20px;border-radius:100px;margin-top:16px}
+.contact__links{display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+.btn{display:inline-block;background:#101010;color:var(--orange);font-family:'DM Mono',monospace;font-size:11px;padding:14px 20px;border-radius:100px;margin-top:4px}
 footer{padding:24px 0;font-family:'DM Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.08em}footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 @media(max-width:900px){.hero .wrap,.contact .contact-in{grid-template-columns:1fr}.proj{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.marquee div{animation:none}}
@@ -90,7 +91,7 @@ footer{padding:24px 0;font-family:'DM Mono',monospace;font-size:10px;text-transf
 <a class="proj rv" href=https://github.com/sarimmohib/opencode-swarm-integration target="_blank" rel="noopener"><div><div class="pno">002 / 2026 — OPEN SOURCE</div><h3 class="pname">opencode Swarm</h3></div><div><p class="pdesc">A multi-agent kit for opencode: one orchestrator, four specialists, and a /team command that plans, builds, reviews and tests in parallel.</p><div class="pstack">SHELL · AGENT TOOLING · VIM</div></div></a>
 <a class="more rv" href="https://github.com/sarimmohib?tab=repositories" target="_blank" rel="noopener">ALL PUBLIC REPOSITORIES ↗</a></div></section>
 <section class="contact" id="contact"><div class="wrap contact-in"><div><h2 class="rv">LET'S GO.</h2><p class="rv">Up for talking about Android, developer tooling, or a problem worth solving. GitHub is the best place to start a conversation.</p></div>
-<div class="rv"><div class="handle">@sarimmohib <button id="copy" type="button">COPY</button></div><br><a class="btn" href="https://github.com/sarimmohib" target="_blank" rel="noopener">OPEN GITHUB ↗</a></div></div></section></main>
+<div class="rv contact__links"><div class="handle">@sarimmohib <button id="copy" type="button">COPY</button></div><a class="handle" href="mailto:sarimmohibkhan@gmail.com">sarimmohibkhan@gmail.com</a><a class="btn" href="https://github.com/sarimmohib" target="_blank" rel="noopener">OPEN GITHUB ↗</a></div></div></section></main>
 <footer><div class="wrap"><span>SARIM MOHIB · FAST PESHAWAR · 2026</span><span><a href="#top">TOP ↑</a></span></div></footer>
 <script>
 (function(){

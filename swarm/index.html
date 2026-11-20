@@ -1,0 +1,101 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>opencode Swarm — one mind, four hands</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet"><style>
+*,*::before,*::after{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-width:0;overflow-x:hidden;-webkit-font-smoothing:antialiased}a{color:inherit;text-decoration:none}
+::selection{background:var(--acc);color:var(--bg)}:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+.wrap{width:100%;max-width:var(--page,1180px);margin:0 auto;padding:0 var(--pad,clamp(20px,5vw,60px))}
+.mono{font-family:var(--mono)}.disp{font-family:var(--disp);text-transform:uppercase;font-weight:800;letter-spacing:-.03em;line-height:.92}
+.back{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;opacity:.7}.back:hover{opacity:1;color:var(--acc)}
+.hd{padding:18px 0;border-bottom:2px solid var(--line)}.hd .wrap{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.brand{font-family:var(--disp);font-weight:800;font-size:18px;letter-spacing:-.03em}.brand span{color:var(--acc)}
+.nav{display:flex;gap:clamp(12px,3vw,26px);font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.1em;flex-wrap:wrap}.nav a:hover{color:var(--acc)}
+.hero{padding:clamp(44px,8vw,88px) 0 clamp(36px,6vw,64px)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(240px,.7fr);gap:clamp(24px,5vw,56px);align-items:center}
+.kick{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--acc)}
+h1{font-family:var(--disp);text-transform:uppercase;font-weight:800;font-size:clamp(50px,9.5vw,116px);letter-spacing:-.04em;line-height:.88;margin:22px 0 0;overflow-wrap:break-word}h1 em{font-style:normal;color:var(--acc)}
+.lead{font-size:15px;line-height:1.7;max-width:50ch;margin:26px 0 0;color:var(--dim)}.lead b{color:var(--ink)}
+.btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+.btn{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;padding:14px 20px;border:1px solid var(--line)}
+.btn--fill{background:var(--acc);color:var(--bg);border-color:var(--acc)}.btn--fill:hover{filter:brightness(1.1)}.btn--line:hover{border-color:var(--acc);color:var(--acc)}
+.diagram{border:1px solid var(--line);padding:22px;background:var(--surf)}
+.dtitle{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--acc);margin-bottom:18px}
+.node{font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:9px 12px;margin:6px 0;display:flex;justify-content:space-between}
+.node.core{border-color:var(--acc);color:var(--acc)}
+.node small{opacity:.6}
+.arrow{text-align:center;color:var(--line);font-size:12px;line-height:1}
+.sec{padding:clamp(54px,8vw,88px) 0;border-top:2px solid var(--line)}
+.sec-h{font-family:var(--disp);text-transform:uppercase;font-weight:800;font-size:clamp(30px,5vw,58px);letter-spacing:-.03em;line-height:.95;margin:0 0 32px}.sec-h em{font-style:normal;color:var(--acc)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:clamp(16px,3vw,28px)}
+.card{border:1px solid var(--line);padding:clamp(18px,3vw,26px)}.card h3{font-family:var(--disp);text-transform:uppercase;font-size:17px;margin:0 0 10px;letter-spacing:-.01em}.card p{font-family:var(--mono);font-size:12px;line-height:1.7;color:var(--dim);margin:0}.card .n{font-family:var(--mono);font-size:10px;color:var(--acc);display:block;margin-bottom:14px}
+pre{background:var(--surf);border:1px solid var(--line);padding:clamp(16px,3vw,24px);overflow:auto;font-family:var(--mono);font-size:11px;line-height:1.9;color:var(--dim)}
+pre .c{color:var(--acc)}pre .g{color:var(--acc);opacity:.8}
+.list{border-top:1px solid var(--line)}.li{border-bottom:1px solid var(--line);padding:18px 0;display:grid;grid-template-columns:190px minmax(0,1fr);gap:20px}
+.li b{font-family:var(--mono);font-size:11px;color:var(--acc);text-transform:uppercase;letter-spacing:.08em}.li span{font-family:var(--mono);font-size:12px;line-height:1.7;color:var(--dim)}
+code{font-family:var(--mono);font-size:11px;background:var(--surf);padding:2px 6px;color:var(--acc)}
+.warn{border:1px solid var(--acc);padding:18px 22px;font-family:var(--mono);font-size:12px;line-height:1.7}.warn b{color:var(--acc);display:block;margin-bottom:8px;font-family:var(--disp);text-transform:uppercase}
+.cta{background:var(--acc);color:var(--bg);padding:clamp(54px,8vw,90px) 0}.cta h2{font-family:var(--disp);text-transform:uppercase;font-size:clamp(38px,8vw,88px);letter-spacing:-.04em;line-height:.88;margin:0}.cta p{font-family:var(--mono);font-size:13px;line-height:1.7;max-width:46ch;margin:20px 0 0;opacity:.85}.cta .btn{background:var(--bg);color:var(--acc);border-color:var(--bg);margin-top:26px}
+footer{padding:26px 0;font-family:var(--mono);font-size:10px;letter-spacing:.06em;opacity:.7}footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.rv{opacity:0;transform:translateY(16px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}.rv.in{opacity:1;transform:none}
+@media(max-width:900px){.hero .wrap{grid-template-columns:1fr}.li{grid-template-columns:1fr;gap:6px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.rv{opacity:1!important;transform:none}}
+:root{--bg:#0a0f0c;--ink:#e8f2e4;--dim:#9bb09a;--acc:#b6f24a;--surf:#111a13;--line:rgba(232,242,228,.2);--page:1180px}
+body{background:var(--bg);color:var(--ink);font-family:'Space Grotesk',sans-serif;--disp:'Chakra Petch',sans-serif;--mono:'IBM Plex Mono',monospace}
+</style></head><body>
+<header class="hd"><div class="wrap"><a class="brand" href="https://sarimmohib.github.io/">SARIM<span>.MOHIB</span></a>
+<nav class="nav"><a href="#inside">Inside</a><a href="#usage">Usage</a><a href="#setup">Setup</a><a href="#source">Source ↗</a></nav></div></header>
+<main>
+<section class="hero"><div class="wrap">
+<div><a class="back" href="https://sarimmohib.github.io/">← BACK TO PORTFOLIO</a>
+<div class="kick" style="margin-top:26px">Open source · Shell · Agent tooling</div>
+<h1>One mind.<br><em>Four hands.</em></h1>
+<p class="lead"><b>opencode Swarm</b> is a multi-agent kit for opencode: one orchestrator that plans and delegates, four specialists that code, review and test in parallel — all with opencode's native subagents. No extra frameworks, no extra dependencies, no extra cost.</p>
+<p class="lead" style="font-family:var(--mono);font-size:12px;margin-top:14px">Works with any provider/model. By default every agent inherits your current session model.</p>
+<div class="btns"><a class="btn btn--fill" href="https://github.com/sarimmohib/opencode-swarm-integration" target="_blank" rel="noopener">Get the kit ↗</a><a class="btn btn--line" href="#setup">Quick setup ↓</a></div>
+</div>
+<div class="hero-art"><div class="diagram rv"><div class="dtitle">// SWARM TOPOLOGY</div>
+<div class="node core"><span>orchestrator</span><small>plan · fan out · verify</small></div>
+<div class="arrow">▼ &nbsp; ▼ &nbsp; ▼ &nbsp; ▼</div>
+<div class="node"><span>swarm-planner</span><small>read-only · subtasks</small></div>
+<div class="node"><span>swarm-coder</span><small>implements changes</small></div>
+<div class="node"><span>swarm-reviewer</span><small>APPROVED / CHANGES NEEDED</small></div>
+<div class="node"><span>swarm-tester</span><small>TESTS: PASS / FAIL</small></div>
+</div></div>
+</div></section>
+
+<section class="sec" id="inside"><div class="wrap">
+<h2 class="sec-h rv">What's <em>inside.</em></h2>
+<div class="grid">
+<div class="card rv"><span class="n">01 / PRIMARY</span><h3>Orchestrator</h3><p>Decomposes tasks, fans out to workers in parallel via the Task tool, synthesizes results, then verifies — with a maximum of two review rounds.</p></div>
+<div class="card rv"><span class="n">02 / WORKERS</span><h3>Four specialists</h3><p>Planner writes file-level subtasks with goal, scope, acceptance criteria and dependencies. Coder implements. Reviewer returns a file:line verdict. Tester runs builds and tests, never edits.</p></div>
+<div class="card rv"><span class="n">03 / SKILLS</span><h3>Three skills</h3><p>Swarm orchestration (when to fan out), task decomposition (how to split multi-file work), and review verdict (the independent review gate format). They trigger on keywords like swarm, decompose, review.</p></div>
+<div class="card rv"><span class="n">04 / COMMAND</span><h3>/team</h3><p>One command runs the whole plan → parallel code → review → test loop. Switch to the orchestrator mid-session with Tab, or invoke any worker directly with @swarm-planner, @swarm-coder and friends.</p></div>
+</div></div></section>
+
+<section class="sec" id="usage"><div class="wrap">
+<h2 class="sec-h rv">Usage &amp; <em>setup.</em></h2>
+<pre><span class="c"># install (default: inherit your current model)</span>
+git clone https://github.com/sarimmohib/opencode-swarm-integration.git
+bash opencode-swarm-integration/install.sh
+
+<span class="c"># optional: pin models per role</span>
+bash install.sh --model anthropic/claude-sonnet-4-6
+bash install.sh --orchestrator-model ... --subagent-model ...
+
+<span class="c"># then restart opencode (config loads once at startup)</span>
+opencode agent list | grep -E "orchestrator|swarm-"
+
+<span class="c"># run the swarm</span>
+<span class="g">/team</span> &lt;task&gt;   <span class="c"># plan → parallel code → review → test</span>
+</pre>
+<div class="list" style="margin-top:26px">
+<div class="li rv"><b>--model M</b><span>Pin all agents to one model. With no flags, orchestrator and subagents inherit your session model and variant — recommended, and free-tier (Zen) users need nothing.</span></div>
+<div class="li rv"><b>--orchestrator-model</b><span>Pin only the orchestrator — e.g. a strong model for planning/delegation.</span></div>
+<div class="li rv"><b>--subagent-model</b><span>Pin only the four workers — e.g. a fast model for execution. Combine both for split roles.</span></div>
+<div class="li rv"><b>--variant V</b><span>Reasoning effort (minimal → xhigh) for pinned agents only. Inherited agents always follow your session variant.</span></div>
+</div>
+<div class="warn rv" style="margin-top:26px"><b>⚠ Known gotcha</b>Never set <code>bash: deny</code> on an agent. Verified live on opencode 1.18.31 (Zen free tier): removing the bash tool makes the gateway reject requests with "free tier can only be used in OpenCode". <code>edit: deny</code> is fine and encouraged for reviewer/tester/planner. Restrict bash <em>commands</em>, not the tool itself.</div>
+</div></section>
+
+<section class="cta"><div class="wrap"><h2>Parallel,<br>by design.</h2><p>Built with opencode's native subagents. MIT licensed. Not affiliated with opencode, Moonshot, Zhipu or NVIDIA.</p><a class="btn" href="https://github.com/sarimmohib/opencode-swarm-integration" target="_blank" rel="noopener">OPEN THE REPO ↗</a></div></section>
+</main>
+<footer><div class="wrap"><span>OPENCODE SWARM · SARIM MOHIB · 2026</span><span>MIT · <a href="https://sarimmohib.github.io/">BACK TO PORTFOLIO ↑</a></span></div></footer>
+<script>(function(){var e=document.querySelectorAll('.rv'),r=matchMedia('(prefers-reduced-motion:reduce)').matches;function s(){e.forEach(function(x){x.classList.add('in')})}if(r||!('IntersectionObserver'in window))s();else{var o=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');o.unobserve(x.target)}})},{rootMargin:'0px 0px -6% 0px',threshold:.08});e.forEach(function(x){o.observe(x)});setTimeout(s,1500)}})()</script></body></html>

@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DSH Text Humanizer &amp; Check</title>
+<style>
+  :root{
+    --bg:      oklch(0.145 0.012 110);
+    --bg-2:    oklch(0.175 0.014 110);
+    --panel:   oklch(0.195 0.015 110);
+    --ink:     oklch(0.955 0.008 100);
+    --muted:   oklch(0.705 0.014 110);
+    --rule:    oklch(0.345 0.020 110);
+    --signal:  oklch(0.875 0.200 112);
+    --alarm:   oklch(0.690 0.170 34);
+    --display: "Bodoni MT", Didot, Georgia, serif;
+    --sans:    "Bahnschrift", "Segoe UI", sans-serif;
+    --mono:    "Ubuntu Sans Mono", Consolas, monospace;
+    --ocr:     "OCR A Extended", Consolas, monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:radial-gradient(60% 45% at 82% 12%, oklch(0.875 0.20 112 / 0.055), transparent 70%);
+  }
+  .wrap{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:0 48px}
+
+  header{
+    display:flex;align-items:center;justify-content:space-between;
+    height:74px;border-bottom:1px solid var(--rule);
+  }
+  .brand{display:flex;align-items:center;gap:13px;font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--ink)}
+  .mark{width:13px;height:13px;background:var(--signal);position:relative;display:inline-block}
+  .mark::after{content:"";position:absolute;inset:4px;background:var(--bg)}
+  .brand span.dim{color:var(--muted)}
+  .head-links{display:flex;align-items:center;gap:26px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted)}
+  .head-links a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--rule);padding-bottom:3px;transition:color .2s,border-color .2s}
+  .head-links a:hover{color:var(--signal);border-color:var(--signal)}
+
+  .hero{display:grid;grid-template-columns:1.04fr .96fr;gap:64px;align-items:center;padding:78px 0 66px}
+  .tag{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--muted);margin-bottom:26px}
+  .tag i{width:6px;height:6px;background:var(--signal);display:inline-block;border-radius:50%}
+  h1{
+    font-family:var(--display);font-weight:400;font-size:clamp(3.4rem,6.6vw,6rem);
+    line-height:.95;letter-spacing:-.045em;margin:0 0 26px;text-wrap:balance;
+  }
+  h1 em{font-style:italic;color:var(--signal)}
+  .lede{font-size:16px;line-height:1.65;color:var(--muted);max-width:49ch;margin:0 0 34px}
+  .actions{display:flex;align-items:center;gap:26px;flex-wrap:wrap}
+  .btn{
+    font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--bg);
+    background:var(--signal);border:1px solid var(--signal);padding:14px 20px;
+    text-decoration:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s;
+  }
+  .btn:hover{background:var(--ink);border-color:var(--ink)}
+  .txtlink{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--rule);padding-bottom:4px;transition:color .2s,border-color .2s}
+  .txtlink:hover{color:var(--signal);border-color:var(--signal)}
+  .fine{margin:30px 0 0;font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:oklch(0.58 0.015 110)}
+
+  .meter{
+    background:var(--panel);border:1px solid var(--rule);
+    box-shadow:0 8px 28px oklch(0 0 0 / 0.22);
+  }
+  .meter-head{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:13px 18px;border-bottom:1px solid var(--rule);
+    font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--muted);
+  }
+  .meter-head b{color:var(--ink);font-weight:400}
+  .live{display:flex;align-items:center;gap:8px;color:var(--signal)}
+  .live i{width:5px;height:5px;border-radius:50%;background:var(--signal);box-shadow:0 0 8px var(--signal)}
+  .chart{
+    position:relative;padding:20px 18px 8px;
+    background:radial-gradient(70% 80% at 90% 100%, oklch(0.875 0.20 112 / 0.06), transparent 70%);
+  }
+  .chart svg{display:block;width:100%;height:auto;overflow:visible}
+  .grid{stroke:var(--rule);stroke-width:1;opacity:.42}
+  .tick{stroke:var(--rule);stroke-width:1;opacity:.28;stroke-dasharray:2 5}
+  .target{stroke:var(--signal);stroke-width:1;stroke-dasharray:4 6;opacity:.55}
+  .glabel{font-family:var(--ocr);font-size:10px;fill:oklch(0.58 0.015 110)}
+  .tlabel{font-family:var(--ocr);font-size:10px;fill:var(--signal);opacity:.8}
+  .xlabel{font-family:var(--ocr);font-size:11px;fill:var(--muted)}
+  .trace-line{stroke:var(--signal);stroke-width:2.5;fill:none;stroke-linejoin:round;stroke-linecap:round}
+  .dot{transform-box:fill-box;transform-origin:center;stroke-width:2.5;fill:var(--panel)}
+  .dot.a{stroke:var(--alarm)}
+  .dot.b{stroke:var(--signal)}
+  .meter-foot{
+    display:flex;justify-content:space-between;align-items:flex-end;gap:18px;
+    padding:16px 18px 18px;border-top:1px solid var(--rule);
+  }
+  .rlabel{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--muted);margin-bottom:4px}
+  .rnum{font-family:var(--ocr);font-size:38px;line-height:1;letter-spacing:-.02em;color:var(--ink);font-variant-numeric:tabular-nums}
+  .actions2{display:flex;align-items:center;gap:14px}
+  .run{
+    font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--bg);background:var(--signal);
+    border:1px solid var(--signal);padding:11px 15px;cursor:pointer;transition:background .2s,border-color .2s;
+  }
+  .run:hover{background:var(--ink);border-color:var(--ink)}
+  .run:disabled{opacity:.55;cursor:default}
+  .verdict{font-family:var(--ocr);font-size:10px;letter-spacing:.06em;white-space:nowrap;color:var(--muted);min-width:92px}
+  .verdict.pass{color:var(--signal)}
+  .verdict.running{color:var(--alarm)}
+
+  .strip{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+  .spec{padding:22px 26px 24px 0}
+  .spec + .spec{border-left:1px solid var(--rule);padding-left:26px}
+  .spec dt{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--signal);margin-bottom:7px}
+  .spec dd{margin:0;font-size:14px;color:var(--muted);line-height:1.45}
+
+  .sec{padding:62px 0 0}
+  .sec-head{display:flex;align-items:center;gap:22px;margin-bottom:8px}
+  .sec-head h2{font-family:var(--display);font-weight:400;font-size:clamp(1.8rem,3vw,2.6rem);letter-spacing:-.035em;margin:0;white-space:nowrap}
+  .sec-head .line{height:1px;background:var(--rule);flex:1}
+  .rows{margin-top:14px}
+  .row{
+    display:grid;grid-template-columns:220px 1fr auto;gap:24px;align-items:baseline;
+    padding:17px 6px;border-bottom:1px solid var(--rule);transition:background .2s;
+  }
+  .row:hover{background:var(--bg-2)}
+  .row .name{font-family:var(--mono);font-size:13px;color:var(--signal);letter-spacing:-.01em}
+  .row .desc{font-size:14px;color:var(--muted)}
+  .row .sig{font-family:var(--mono);font-size:10px;color:oklch(0.58 0.015 110);letter-spacing:.04em;white-space:nowrap}
+
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:64px;padding-top:0}
+  .col-label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--signal);margin:0 0 18px}
+  .notes{list-style:none;margin:0;padding:0}
+  .notes li{padding:11px 0;border-bottom:1px solid var(--rule);font-size:14px;color:var(--muted);display:flex;gap:14px}
+  .notes li::before{content:"—";color:var(--rule);font-family:var(--mono)}
+  .notes code{font-family:var(--mono);font-size:12px;color:var(--ink)}
+  .term{background:var(--panel);border:1px solid var(--rule)}
+  .term-head{padding:10px 14px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--muted)}
+  .term pre{margin:0;padding:18px 16px 20px;font-family:var(--mono);font-size:12px;line-height:1.85;color:var(--muted);white-space:pre-wrap;word-break:break-word}
+  .term .p{color:var(--signal)}
+  .term .c{color:oklch(0.58 0.015 110)}
+
+  footer{
+    margin-top:72px;border-top:1px solid var(--rule);padding:24px 0 36px;
+    display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
+    font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:oklch(0.58 0.015 110);
+  }
+  footer a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--rule);padding-bottom:3px}
+  footer a:hover{color:var(--signal)}
+
+  @media (max-width:940px){
+    .wrap{padding:0 28px}
+    .hero{grid-template-columns:1fr;gap:48px;padding:56px 0 50px}
+    .meter{max-width:620px}
+    .duo{grid-template-columns:1fr;gap:44px}
+    .row{grid-template-columns:1fr;gap:5px}
+    .row .sig{display:none}
+  }
+  @media (max-width:640px){
+    .wrap{padding:0 20px}
+    body{overflow-x:hidden}
+    header{height:64px}
+    .head-links{gap:14px}
+    .head-links span{display:none}
+    .hero > div,.meter{min-width:0}
+    .meter-foot{flex-direction:column;align-items:stretch;gap:14px}
+    .actions2{justify-content:space-between;flex-wrap:wrap;gap:10px}
+    .verdict{min-width:0}
+    .chart{padding:16px 12px 6px}
+    .chart svg{overflow:hidden}
+    .strip{grid-template-columns:1fr}
+    .spec{padding:16px 0}
+    .spec + .spec{border-left:none;border-top:1px solid var(--rule);padding-left:0}
+    .rnum{font-size:30px}
+    .term pre{font-size:11px}
+    .sec-head h2{font-size:1.9rem}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none!important}
+  }
+</style>
+<style id="ix">
+  .ix-h,.ix-v{position:fixed;pointer-events:none;z-index:80;background:var(--signal);opacity:0;transition:opacity .25s ease}
+  .ix-h{left:0;right:0;height:1px;top:0}
+  .ix-v{top:0;bottom:0;width:1px;left:0}
+  .ix-ring{position:fixed;width:22px;height:22px;margin:-11px 0 0 -11px;border:1px solid var(--signal);border-radius:50%;pointer-events:none;z-index:81;opacity:0;transition:opacity .25s,width .18s,height .18s,margin .18s,border-color .18s}
+  .ix-badge{position:fixed;z-index:82;pointer-events:none;font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--signal);background:var(--bg);border:1px solid var(--rule);padding:4px 7px;opacity:0;transition:opacity .2s;white-space:nowrap}
+  body.ix-live .ix-h,body.ix-live .ix-v{opacity:.14}
+  body.ix-live .ix-ring{opacity:.6}
+  body.ix-live .ix-badge{opacity:1}
+  body.ix-hot .ix-ring{width:34px;height:34px;margin:-17px 0 0 -17px;border-color:var(--ink)}
+  a,button,[role=button]{cursor:pointer}
+  :focus-visible{outline:1px solid var(--signal);outline-offset:3px}
+  .brand,.meter,.meter-head,.rlabel,.fine,.col-label,.term,.term-head,.notes li,.spec,.row,.verdict,.chart,.tag,footer,h1,h1 em,.lede,.xlabel,.glabel,.tlabel{transition:color .2s ease,background .2s ease,border-color .2s ease,box-shadow .25s ease,transform .25s cubic-bezier(.16,1,.3,1),opacity .2s ease}
+  .brand:hover{color:var(--signal)}
+  .brand:hover .mark{transform:rotate(45deg);background:var(--ink)}
+  .head-links a:hover{color:var(--signal);border-color:var(--signal)}
+  .tag:hover{color:var(--ink)}
+  .tag:hover i{box-shadow:0 0 10px var(--signal)}
+  h1:hover em{text-shadow:0 0 26px oklch(0.875 0.20 112 / .35)}
+  .lede:hover{color:var(--ink)}
+  .fine:hover{color:var(--muted)}
+  .meter:hover{border-color:oklch(0.55 0.08 110);box-shadow:0 10px 34px oklch(0 0 0 / .32)}
+  .meter-head:hover{color:var(--ink)}
+  .live:hover i{box-shadow:0 0 12px var(--signal);transform:scale(1.5)}
+  .chart:hover{background:radial-gradient(70% 80% at 90% 100%, oklch(0.875 0.20 112 / .11), transparent 70%)}
+  .rlabel:hover{color:var(--ink)}
+  .rnum:hover{color:var(--signal)}
+  .verdict:hover{color:var(--signal)}
+  .spec:hover{background:var(--bg-2)}
+  .spec:hover dt,.spec:hover dd{color:var(--ink)}
+  .spec.sel{box-shadow:inset 0 -2px var(--signal)}
+  .row:hover .name,.row:hover .desc{color:var(--ink)}
+  .row:hover .sig{color:var(--signal)}
+  .notes li:hover{background:var(--bg-2);padding-left:18px}
+  .notes li:hover::before{color:var(--signal)}
+  .notes li.done{color:oklch(0.52 0.015 110)}
+  .notes li.done::before{content:"✓";color:var(--signal)}
+  .col-label:hover{color:var(--ink)}
+  .term:hover{border-color:oklch(0.55 0.08 110)}
+  .term-head:hover{color:var(--signal)}
+  .copy{float:right;background:none;border:1px solid var(--rule);color:var(--muted);font-family:var(--mono);font-size:9px;letter-spacing:.12em;padding:2px 7px;cursor:pointer;transition:color .2s,background .2s,border-color .2s}
+  .copy:hover{color:var(--bg);background:var(--signal);border-color:var(--signal)}
+  .toast{position:fixed;right:24px;bottom:24px;z-index:90;background:var(--signal);color:var(--bg);font-family:var(--mono);font-size:10px;letter-spacing:.08em;padding:11px 15px;opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .25s,transform .25s cubic-bezier(.16,1,.3,1);max-width:340px}
+  .toast.show{opacity:1;transform:none}
+  footer:hover a{color:var(--signal)}
+  .xlabel:hover,.glabel:hover{fill:var(--signal)}
+  .tlabel:hover{fill:var(--ink)}
+  .dot{cursor:crosshair}
+  .meter,.spec,.notes li,.row{cursor:pointer}
+  .chart{cursor:crosshair}
+  .term pre{cursor:text}
+  .sec-head h2:hover{color:var(--signal)}
+  .sec-head .line:hover{background:var(--signal)}
+  .trace-line:hover{stroke:var(--ink);filter:drop-shadow(0 0 5px oklch(0.875 0.20 112 / .6))}
+  .meter-foot:hover .rnum{color:var(--signal)}
+  .spec:hover{transform:translateY(-2px)}
+  .row:hover{padding-left:12px}
+  .notes code:hover{color:var(--signal)}
+  .btn:active,.run:active,.copy:active{transform:translateY(1px)}
+  @media (pointer:coarse){.ix-h,.ix-v,.ix-ring,.ix-badge{display:none}}
+  @media (prefers-reduced-motion:reduce){.ix-h,.ix-v,.ix-ring,.ix-badge{display:none}}
+</style>
+<style id="game">
+  .game{padding-top:70px}
+  .game + .duo{padding-top:64px}
+  .game-panel{border:1px solid var(--rule);background:var(--panel);margin-top:16px}
+  .game-head{display:flex;justify-content:space-between;gap:12px;padding:13px 18px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--muted)}
+  .game-head b{color:var(--ink);font-weight:400}
+  .game-stat{color:var(--signal)}
+  .game-timer{height:2px;background:var(--bg-2);overflow:hidden}
+  .game-timer i{display:block;height:100%;width:100%;background:var(--signal);transform-origin:left}
+  @keyframes drain{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+  .game-body{padding:26px 24px 20px}
+  .game-stage{min-height:180px;display:flex;flex-direction:column;justify-content:center}
+  .game-prompt{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--muted);margin:0 0 18px;text-align:center}
+  .game-quote{font-family:var(--display);font-size:clamp(1.4rem,2.6vw,2.25rem);line-height:1.22;letter-spacing:-.03em;margin:0;text-align:center;text-wrap:balance;color:var(--ink);transition:opacity .2s ease}
+  .game-quote:hover{color:var(--signal)}
+  .game-feedback{text-align:center;font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:oklch(0.58 0.015 110);margin-top:22px;min-height:14px}
+  .game-feedback.ok{color:var(--signal)}
+  .game-feedback.no{color:var(--alarm)}
+  .game-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:24px}
+  .guess{font-family:var(--mono);font-size:11px;letter-spacing:.1em;padding:12px 22px;background:none;border:1px solid var(--rule);color:var(--ink);transition:color .2s,border-color .2s,background .2s,transform .2s}
+  .guess.human:hover{border-color:var(--signal);color:var(--signal);background:oklch(0.875 0.20 112 / .08)}
+  .guess.ai:hover{border-color:var(--alarm);color:var(--alarm);background:oklch(0.690 0.170 34 / .08)}
+  .guess.start{border-color:var(--signal);background:var(--signal);color:var(--bg)}
+  .guess.start:hover{background:var(--ink);border-color:var(--ink)}
+  .guess:active{transform:translateY(1px)}
+  .game-panel:not(.playing) .guess.human,.game-panel:not(.playing) .guess.ai{display:none}
+  .game-panel.playing .guess.start{display:none}
+  .game-foot{display:flex;justify-content:space-between;border-top:1px solid var(--rule);margin-top:24px;padding-top:14px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--muted)}
+  .game-foot b{font-family:var(--ocr);font-size:16px;color:var(--ink);font-weight:400}
+  @media (max-width:640px){
+    .game-body{padding:22px 16px 18px}
+    .game-quote{font-size:1.35rem}
+    .game-actions{gap:8px}
+    .guess{padding:11px 16px;font-size:10px}
+  }
+  @media (prefers-reduced-motion:reduce){.game-timer i{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand"><span class="mark"></span> DSH <span class="dim">/</span> TEXT HUMANIZER <span class="dim">&amp; CHECK</span></div>
+    <div class="head-links"><span>MIT LICENSE</span><a href="https://github.com/sarimmohib/dsh-text-humanizer-check">GITHUB &#8599;</a></div>
+  </header>
+
+  <section class="hero">
+    <div>
+      <div class="tag"><i></i> PLUGIN FOR DEEPSEEK HARNESS</div>
+      <h1>Sound human.<br><em>Then prove it.</em></h1>
+      <p class="lede">Rewrite through a real browser, measure ZeroGPT confidence, and repeat until the number drops. The patterns that lower scores ship inside the plugin.</p>
+      <div class="actions">
+        <a class="btn" href="https://github.com/sarimmohib/dsh-text-humanizer-check">INSTALL PLUGIN &#8599;</a>
+        <a class="txtlink" href="https://github.com/sarimmohib/dsh-text-humanizer-check#readme">READ THE README</a>
+      </div>
+      <p class="fine">REQUIRES DSH + CDP PLUGIN + CHROMIUM ON PORT 9222</p>
+    </div>
+
+    <div class="meter">
+      <div class="meter-head"><span><b>ZEROGPT</b> / CONFIDENCE TRACE</span><span class="live"><i></i> LIVE</span></div>
+      <div class="chart">
+        <svg viewBox="0 0 520 222" role="img" aria-label="AI confidence falling from 98 to 3 percent over four checks">
+          <line class="grid" x1="36" y1="20" x2="506" y2="20"/>
+          <line class="grid" x1="36" y1="110" x2="506" y2="110"/>
+          <line class="grid" x1="36" y1="200" x2="506" y2="200"/>
+          <line class="tick" x1="60" y1="20" x2="60" y2="200"/>
+          <line class="tick" x1="190" y1="20" x2="190" y2="200"/>
+          <line class="tick" x1="320" y1="20" x2="320" y2="200"/>
+          <line class="tick" x1="450" y1="20" x2="450" y2="200"/>
+          <line class="target" x1="36" y1="182" x2="506" y2="182"/>
+          <text class="tlabel" x="506" y="175" text-anchor="end">TARGET 10</text>
+          <text class="glabel" x="10" y="24">100</text>
+          <text class="glabel" x="18" y="204">0</text>
+          <polyline id="trace-line" class="trace-line" points="60,23.6 190,90.2 320,156.8 450,194.6"/>
+          <circle class="dot a" cx="60" cy="23.6" r="5.5"/>
+          <circle class="dot b" cx="190" cy="90.2" r="5.5"/>
+          <circle class="dot b" cx="320" cy="156.8" r="5.5"/>
+          <circle class="dot b" cx="450" cy="194.6" r="5.5"/>
+          <text class="xlabel" x="60" y="218" text-anchor="middle">01</text>
+          <text class="xlabel" x="190" y="218" text-anchor="middle">02</text>
+          <text class="xlabel" x="320" y="218" text-anchor="middle">03</text>
+          <text class="xlabel" x="450" y="218" text-anchor="middle">04</text>
+        </svg>
+      </div>
+      <div class="meter-foot">
+        <div><span class="rlabel">AI CONFIDENCE</span><span class="rnum" id="num">3.2%</span></div>
+        <div class="actions2">
+          <button class="run" id="run" type="button">RUN CHECK &#8594;</button>
+          <span class="verdict pass" id="verdict">HUMAN / PASS</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <dl class="strip">
+    <div class="spec"><dt>TRANSPORT</dt><dd>Real browser session over CDP, not blocked HTTP calls.</dd></div>
+    <div class="spec"><dt>REPEATS</dt><dd>Up to five checks. Lowest score kept.</dd></div>
+    <div class="spec"><dt>MEMORY</dt><dd>Detector quirks encoded as an on-demand skill.</dd></div>
+  </dl>
+
+  <section class="sec">
+    <div class="sec-head"><h2>What ships</h2><span class="line"></span></div>
+    <div class="rows">
+      <div class="row"><span class="name">humanize_check</span><span class="desc">Chunk, rewrite, re-check until the target score holds.</span><span class="sig">text &middot; target &middot; rounds</span></div>
+      <div class="row"><span class="name">zerogpt_check</span><span class="desc">Measure any text without rewriting it. One reused tab.</span><span class="sig">text &middot; attempts</span></div>
+      <div class="row"><span class="name">apply_patterns</span><span class="desc">Apply the formatting rules offline, no browser needed.</span><span class="sig">text</span></div>
+      <div class="row"><span class="name">text-humanizing</span><span class="desc">The skill file: scoring behavior and what actually moves a number.</span><span class="sig">skill</span></div>
+    </div>
+  </section>
+
+  <section class="sec game">
+    <div class="sec-head"><h2>Beat the detector</h2><span class="line"></span></div>
+    <div class="game-panel" id="gamePanel">
+      <div class="game-head"><span><b>DETECTOR DUEL</b> / 10 ROUNDS / 7 SEC EACH</span><span class="game-stat" id="gStat">READY</span></div>
+      <div class="game-timer"><i id="gTimer"></i></div>
+      <div class="game-body">
+        <div class="game-stage">
+          <p class="game-prompt" id="gPrompt">Which one was written by a machine?</p>
+          <blockquote class="game-quote" id="gQuote">“The implementation leverages a sophisticated architecture to facilitate seamless integration across distributed environments.”</blockquote>
+          <div class="game-feedback" id="gFeedback">PRESS START TO PLAY</div>
+        </div>
+        <div class="game-actions">
+          <button class="guess human" id="gHuman" type="button">HUMAN [H]</button>
+          <button class="guess ai" id="gAi" type="button">[A] AI</button>
+          <button class="guess start" id="gStart" type="button">START GAME</button>
+        </div>
+        <div class="game-foot">
+          <span>SCORE <b id="gScore">00</b>/10</span>
+          <span>STREAK <b id="gStreak">0</b></span>
+          <span>BEST <b id="gBest">00</b></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec duo">
+    <div>
+      <p class="col-label">FIELD NOTES / WHAT MOVES THE SCORE</p>
+      <ul class="notes">
+        <li>Plain bullets beat numbered lists.</li>
+        <li>Short headers win. Drop the <code>(18 ideas)</code> tail.</li>
+        <li><code>=</code> separators help. Literal <code>***</code> hurts.</li>
+        <li>Scores wobble. Check five times, keep the lowest.</li>
+        <li>Whole-document score is not the mean of sections.</li>
+      </ul>
+    </div>
+    <div>
+      <p class="col-label">QUICK START</p>
+      <div class="term">
+        <div class="term-head">SHELL</div>
+        <pre><span class="c"># install from the cloned folder</span>
+<span class="p">$</span> plugin_manager install_bundle     target=/path/to/cloned/folder
+
+<span class="c"># then, in a DSH session:</span>
+<span class="p">$</span> "Humanize this and get ZeroGPT
+    under 10 percent."</pre>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>MIT LICENSE &nbsp;&middot;&nbsp; BUILT FOR DEEPSEEK HARNESS</span>
+    <a href="https://github.com/sarimmohib/dsh-text-humanizer-check">github.com/sarimmohib/dsh-text-humanizer-check &#8599;</a>
+  </footer>
+
+</div>
+<script>
+(function(){
+  var num = document.getElementById('num');
+  var line = document.getElementById('trace-line');
+  var dots = document.querySelectorAll('.dot');
+  var verdict = document.getElementById('verdict');
+  var btn = document.getElementById('run');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function ease(t){ return 1 - Math.pow(1 - t, 4); }
+  function show(v){ num.textContent = v.toFixed(1) + '%'; }
+  btn.addEventListener('click', function(){
+    btn.disabled = true;
+    verdict.textContent = 'RUNNING';
+    verdict.className = 'verdict running';
+    var len = line.getTotalLength();
+    line.style.transition = 'none';
+    line.style.strokeDasharray = len;
+    line.style.strokeDashoffset = len;
+    for (var j=0;j<dots.length;j++){ dots[j].style.transition='none'; dots[j].style.opacity='0'; dots[j].style.transform='scale(0)'; }
+    void line.getBoundingClientRect();
+    if (reduce){
+      line.style.strokeDashoffset='0';
+      for (var k=0;k<dots.length;k++){ dots[k].style.opacity='1'; dots[k].style.transform='scale(1)'; }
+      show(3.2); verdict.textContent='HUMAN / PASS'; verdict.className='verdict pass'; btn.disabled=false; return;
+    }
+    line.style.transition = 'stroke-dashoffset 1.25s cubic-bezier(.16,1,.3,1)';
+    line.style.strokeDashoffset = '0';
+    for (var i=0;i<dots.length;i++){
+      var delay = (0.16 + i*0.27) + 's';
+      dots[i].style.transition = 'opacity .3s ease ' + delay + ', transform .35s cubic-bezier(.16,1,.3,1) ' + delay;
+      dots[i].style.opacity='1'; dots[i].style.transform='scale(1)';
+    }
+    var t0 = performance.now(), dur = 1500;
+    function tick(now){
+      var p = Math.min(1,(now-t0)/dur);
+      show(98 - (98-3.2)*ease(p));
+      if (p < 1) requestAnimationFrame(tick);
+      else { show(3.2); verdict.textContent='HUMAN / PASS'; verdict.className='verdict pass'; btn.disabled=false; }
+    }
+    requestAnimationFrame(tick);
+  });
+})();
+</script>
+<script>
+(function(){
+  var h=document.createElement('div');h.className='ix-h';
+  var v=document.createElement('div');v.className='ix-v';
+  var ring=document.createElement('div');ring.className='ix-ring';
+  var badge=document.createElement('div');badge.className='ix-badge';
+  document.body.appendChild(h);document.body.appendChild(v);document.body.appendChild(ring);document.body.appendChild(badge);
+  var toastEl=document.createElement('div');toastEl.className='toast';toastEl.id='toast';document.body.appendChild(toastEl);
+  function toast(msg){toastEl.textContent=msg;toastEl.classList.add('show');clearTimeout(toastEl._t);toastEl._t=setTimeout(function(){toastEl.classList.remove('show')},1900);}
+  var fine=window.matchMedia('(pointer:fine)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(fine){
+    document.addEventListener('mousemove',function(e){
+      document.body.classList.add('ix-live');
+      h.style.top=e.clientY+'px';v.style.left=e.clientX+'px';
+      ring.style.left=e.clientX+'px';ring.style.top=e.clientY+'px';
+      badge.style.left=Math.min(e.clientX+18,window.innerWidth-200)+'px';
+      badge.style.top=Math.min(e.clientY+20,window.innerHeight-40)+'px';
+      if(!badge.dataset.lock)badge.textContent='X '+String(e.clientX).padStart(4,'0')+'  Y '+String(e.clientY).padStart(4,'0');
+    });
+    document.addEventListener('mouseover',function(e){
+      var t=e.target.closest('a,button,.row,.spec,.notes li,.dot');
+      document.body.classList.toggle('ix-hot',!!t);
+    });
+    document.addEventListener('mouseout',function(e){if(!e.relatedTarget)document.body.classList.remove('ix-live')});
+  }
+  var labels=['R01  98.0% AI','R02  61.0% AI','R03  24.0% AI','R04  3.2% HUMAN'];
+  var dots=document.querySelectorAll('.dot');
+  for(var i=0;i<dots.length;i++){(function(d,label){
+    d.addEventListener('mouseenter',function(){badge.dataset.lock='1';badge.textContent=label;d.setAttribute('r','8')});
+    d.addEventListener('mouseleave',function(){delete badge.dataset.lock;d.setAttribute('r','5.5')});
+  })(dots[i],labels[i]);}
+  var notes=document.querySelectorAll('.notes li');
+  for(var n=0;n<notes.length;n++)notes[n].addEventListener('click',function(){this.classList.toggle('done')});
+  var usages=['humanize_check({ text, target: 10, max_rounds: 3 })','zerogpt_check({ text, attempts: 5 })','apply_patterns({ text })','skill: text-humanizing  // loaded on demand'];
+  var rows=document.querySelectorAll('.row');
+  for(var r=0;r<rows.length;r++){(function(row,msg){row.addEventListener('click',function(){toast(msg)})})(rows[r],usages[r]);}
+  var specs=document.querySelectorAll('.spec');
+  for(var s=0;s<specs.length;s++)specs[s].addEventListener('click',function(){
+    var was=this.classList.contains('sel');
+    for(var k=0;k<specs.length;k++)specs[k].classList.remove('sel');
+    if(!was)this.classList.add('sel');
+  });
+  var head=document.querySelector('.term-head');
+  var copy=document.createElement('button');copy.className='copy';copy.type='button';copy.textContent='COPY';head.appendChild(copy);
+  copy.addEventListener('click',function(){
+    var code=document.querySelector('.term pre').innerText;
+    if(navigator.clipboard)navigator.clipboard.writeText(code).then(function(){toast('COPIED TO CLIPBOARD')},function(){toast('COPY UNAVAILABLE')});
+    else toast('COPY UNAVAILABLE');
+  });
+  var btn=document.getElementById('run');
+  btn.addEventListener('mouseenter',function(){badge.dataset.lock='1';badge.textContent='REPLAY THE TRACE'});
+  btn.addEventListener('mouseleave',function(){delete badge.dataset.lock});
+  document.querySelector('.meter').addEventListener('click',function(e){if(!e.target.closest('button,.dot'))btn.click()});
+})();
+</script>
+<script>
+(function(){
+  var panel=document.getElementById('gamePanel');
+  var prompt=document.getElementById('gPrompt');
+  var quote=document.getElementById('gQuote');
+  var feedback=document.getElementById('gFeedback');
+  var stat=document.getElementById('gStat');
+  var timer=document.getElementById('gTimer');
+  var scoreEl=document.getElementById('gScore');
+  var streakEl=document.getElementById('gStreak');
+  var bestEl=document.getElementById('gBest');
+  var bH=document.getElementById('gHuman'), bA=document.getElementById('gAi'), bS=document.getElementById('gStart');
+  var items=[
+    ['ai','The implementation leverages a sophisticated architecture to facilitate seamless integration across distributed environments.'],
+    ['ai','In conclusion, it is important to note that this approach offers numerous benefits for a wide range of stakeholders.'],
+    ['ai','Furthermore, the utilization of advanced methodologies ensures optimal outcomes in diverse operational contexts.'],
+    ['ai','This comprehensive solution provides a robust framework that effectively addresses the evolving needs of modern organizations.'],
+    ['ai','It is worth noting that the system demonstrates remarkable efficiency while maintaining a high degree of reliability.'],
+    ['ai','By leveraging state-of-the-art techniques, we can facilitate a more streamlined and effective workflow.'],
+    ['ai','The results indicate a significant improvement in performance metrics across all evaluated parameters.'],
+    ['human','I tried it twice, messed up the first run, then just left it there.'],
+    ['human','Honestly? No idea. Ask me after coffee.'],
+    ['human','We shipped it on a Friday. Do not ask how that Friday went.'],
+    ['human','The thing is, nobody reads the docs until something breaks.'],
+    ['human','I wrote a rough version, then deleted half of it. Turns out half was enough.'],
+    ['human','My cat sat on the keyboard. The commit message is better than mine.'],
+    ['human','Took three tries and a very patient teammate to get this working.']
+  ];
+  var deck=[], idx=0, score=0, streak=0, best=0, playing=false, lock=false, tick=null;
+  try{best=parseInt(localStorage.getItem('dsh-detector-best')||'0',10)||0}catch(e){}
+  function fmt(n){return n<10?'0'+n:''+n}
+  bestEl.textContent=fmt(best);
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+  function say(txt,cls){feedback.textContent=txt;feedback.className='game-feedback'+(cls?' '+cls:'')}
+  function armTimer(){timer.style.animation='none';void timer.offsetWidth;timer.style.animation='drain 7s linear forwards'}
+  function show(){
+    var item=deck[idx];
+    quote.textContent='“'+item[1]+'”';
+    stat.textContent='ROUND '+fmt(idx+1)+'/10';
+    say('HUMAN OR AI?');
+    lock=false;
+    armTimer();
+    clearTimeout(tick);
+    tick=setTimeout(function(){
+      if(lock)return;
+      lock=true;streak=0;streakEl.textContent='0';
+      say('TOO SLOW · IT WAS '+item[0].toUpperCase(),'no');
+      setTimeout(next,900);
+    },7000);
+  }
+  function next(){
+    idx++;
+    if(idx>=10){end();return}
+    show();
+  }
+  function guess(kind){
+    if(!playing||lock)return;
+    lock=true;clearTimeout(tick);
+    var item=deck[idx], right=(kind===item[0]);
+    if(right){score++;streak++;say('CORRECT · +1','ok')}
+    else{streak=0;say('MISS · IT WAS '+item[0].toUpperCase(),'no')}
+    scoreEl.textContent=fmt(score);streakEl.textContent=String(streak);
+    timer.style.animation='none';
+    setTimeout(next,850);
+  }
+  function end(){
+    playing=false;panel.classList.remove('playing');
+    var v=score>=9?'HUMAN EYE':score>=7?'GOOD EAR':score>=5?'SUSPICIOUS':'MACHINE SYMPATHIZER';
+    quote.textContent=v;
+    prompt.textContent='FINAL VERDICT';
+    stat.textContent=fmt(score)+'/10';
+    say(score>best?'NEW BEST · PRESS PLAY AGAIN':'PRESS PLAY AGAIN','ok');
+    if(score>best){best=score;bestEl.textContent=fmt(best);try{localStorage.setItem('dsh-detector-best',String(best))}catch(e){}}
+    bS.textContent='PLAY AGAIN';
+    timer.style.animation='none';timer.style.transform='scaleX(1)';
+  }
+  function begin(){
+    var ai=shuffle(items.filter(function(x){return x[0]==='ai'})).slice(0,5);
+    var human=shuffle(items.filter(function(x){return x[0]==='human'})).slice(0,5);
+    deck=shuffle(ai.concat(human));
+    idx=-1;score=0;streak=0;playing=true;
+    scoreEl.textContent='00';streakEl.textContent='0';
+    panel.classList.add('playing');
+    prompt.textContent='HUMAN OR AI? TAP ONE, OR USE H / A.';
+    bS.textContent='RESTART';
+    next();
+  }
+  bS.addEventListener('click',begin);
+  bH.addEventListener('click',function(){guess('human')});
+  bA.addEventListener('click',function(){guess('ai')});
+  document.addEventListener('keydown',function(e){
+    if(!playing)return;
+    var k=e.key.toLowerCase();
+    if(k==='h'||k==='1')guess('human');
+    if(k==='a'||k==='2')guess('ai');
+  });
+})();
+</script>
+</body>
+</html>
